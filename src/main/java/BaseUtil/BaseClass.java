@@ -4,6 +4,7 @@ import java.time.Duration;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
@@ -18,8 +19,12 @@ public class BaseClass {
 	public void setUp() {
 		// First job is to recognize the location of driver
 		System.setProperty("webdriver.chrome.driver", "C:\\Users\\Tofael\\eclipse-workspace\\gov.cms.portal.january\\driver\\chromedriver.exe");
+		// Please see below 2 line added
+		ChromeOptions options = new ChromeOptions();
+		options.addArguments("--remote-allow-origins=*");
+		
 		// Then we need to instantiate the driver
-		driver = new ChromeDriver();
+		driver = new ChromeDriver(options);
 		// maximize method maximize the window
 		driver.manage().window().maximize();
 		// deleteAllCookies do delete the cookies
