@@ -8,7 +8,7 @@ public class HomePageTest extends BaseClass {
 	
 	@Test
 	public void clickLoginButtonTest() throws InterruptedException {
-		homePage.clickLoginButton();
+		homePage.clickLoginButton(); //
 	}
 
 }
