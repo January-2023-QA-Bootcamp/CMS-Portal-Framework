@@ -22,7 +22,6 @@ public class BaseClass {
 		// Please see below 2 line added
 		ChromeOptions options = new ChromeOptions();
 		options.addArguments("--remote-allow-origins=*");
-		
 		// Then we need to instantiate the driver
 		driver = new ChromeDriver(options);
 		// maximize method maximize the window
