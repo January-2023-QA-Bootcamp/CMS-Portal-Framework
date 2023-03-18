@@ -1,10 +1,15 @@
 package pages;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.PageFactory;
+
+// new, you have to manually write it to get access
+// this is possible when they are static in nature, * means all
+import static common.CommonActions.*;
 
 public class HomePage {
 	public WebDriver driver;
@@ -24,7 +29,7 @@ public class HomePage {
 	@FindBy (name = "user-d")
 	WebElement userId;
 	
-	// 2nd way to write the WebElement: not common, here password, I used
+	// 2nd way to write the WebElement: not common, here I used for password
 	// Use of 'name' attribute as locator
 	@FindBy(how = How.NAME, using = "pass-d")
 	WebElement password;
@@ -32,6 +37,17 @@ public class HomePage {
 	// Use of 'class' attribute as locator
 	@FindBy (className = "cms-newuser-reg")
 	WebElement newUserRegistration;
+	
+	@FindBy (className = "cms-newuser-registration")
+	WebElement IncorrectNewUserRegistration;
+	
+	@FindBy (xpath = "//a[text()='User ID']")
+	WebElement forgotUserId;
+	
+	// 3rd way to write the WebElement: not common, here I used unlock web element
+	// instead of xpath, we can use id, name, class etc as locator.
+	By unlock = By.xpath("//a[contains(text(), 'unl')]");
+	// Please see line 102 for clickUnlock() method
 	
 	public void clickLoginButton() throws InterruptedException {
 		loginButton.click();
@@ -50,6 +66,42 @@ public class HomePage {
 	public void clickNewUserRegistration () throws InterruptedException {
 		newUserRegistration.click();
 		Thread.sleep(3000);
+	}
+	
+	public void clickIncorrectNewUserRegistration () throws InterruptedException {
+		IncorrectNewUserRegistration.click();
+		Thread.sleep(3000);
+	}
+	
+	public void forgotUserIdClick() {
+		clickElement(forgotUserId);
+	}
+	
+	// We are using sendKeys() to input text
+	public void inputTextInUserIdField () {
+		// as we used Thread.sleep either we can use throws or we can use try catch block
+		// we used try catch block here, No relation of try catch with sendKeys() method
+		try {
+			// userId webElement is created and used before in line 28
+			userId.sendKeys("enthrall_12");
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void inputTextInUserIdAndPasswordFieldThenClickLoginButton () throws InterruptedException {
+		inputText(userId, "January 2023");
+		Thread.sleep(3000);
+		inputText(password, "Enthrall@1234");
+		Thread.sleep(3000);
+		clickElement(loginButton);
+		Thread.sleep(6000);
+	}
+	
+	public void clickUnlock() {
+		// new
+		driver.findElement(unlock).click();
 	}
 	
 	
