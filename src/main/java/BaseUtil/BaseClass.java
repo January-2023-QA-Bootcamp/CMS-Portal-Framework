@@ -7,6 +7,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
@@ -75,10 +76,26 @@ public class BaseClass {
 		
 		// In the industry: Chrome driver is used 90% time
 		// and the best practice to show location: ./driver/chromedriver.exe
+		
 		System.setProperty("webdriver.chrome.driver",  "./driver/chromedriver.exe");
-		ChromeOptions options = new ChromeOptions();
-		options.addArguments("--remote-allow-origins=*");
-		driver = new ChromeDriver(options);
+		ChromeOptions cOptions = new ChromeOptions();
+		cOptions.addArguments("--remote-allow-origins=*");
+		driver = new ChromeDriver(cOptions);
+				
+		/*
+		// For Firefox driver
+		System.setProperty("webdriver.gecko.driver",  "./driver/geckodriver.exe");
+		FirefoxOptions fOptions = new FirefoxOptions();
+		fOptions.setBinary("C:\\Program Files\\Mozilla Firefox\\firefox.exe");
+		driver = new FirefoxDriver(fOptions);
+		*/
+		
+		/*
+		// For Edge driver
+		System.setProperty("webdriver.edge.driver",  "./driver/msedgedriver.exe");
+		driver = new EdgeDriver();
+		*/
+		
 		
 		driver.manage().window().maximize();
 		driver.manage().deleteAllCookies();
