@@ -253,7 +253,6 @@ public class HomePageTest extends BaseClass {
 	@Test(enabled = false)
 	public void use_of_getAttribute_method () throws InterruptedException {
 		driver.findElement(By.xpath("//input[@id='cms-login-userId']")).click();
-		// TODO Nasir
 		Thread.sleep(4000);
 		String value01 = driver.findElement(By.xpath("//input[@id='cms-login-userId']")).getAttribute("placeholder");
 		String value02 = driver.findElement(By.xpath("//input[@id='cms-login-userId']")).getAttribute("class");
@@ -263,6 +262,18 @@ public class HomePageTest extends BaseClass {
 		System.out.println("The value of the class attribute is: " + value02);
 		System.out.println("The value of the id attribute is: " + value03);
 		System.out.println("The value of the title attribute is: " + value04);
+	}
+	
+	// We use User ID field
+	// getAttribute() actually give the value of the Attribute
+	@Test(enabled = true)
+	public void use_of_getAttribute_method_02 () throws InterruptedException {
+		driver.findElement(By.xpath("//input[@id='cms-login-userId']")).click();
+		// Where you wanna click Next
+		driver.findElement(By.xpath("//input[@id='cms-login-password']")).click();
+		Thread.sleep(4000);
+		String value01 = driver.findElement(By.xpath("//input[@id='cms-login-userId']")).getAttribute("placeholder");
+		System.out.println("The value of the placeholder attribute is: " + value01);
 	}
 	
 	// Using User Id field
@@ -288,7 +299,7 @@ public class HomePageTest extends BaseClass {
 	}
 	
 	// Click on forgot password field, then send a value inside "Enter user id" field and click by Return key
-	@Test(enabled = true)
+	@Test(enabled = false)
 	public void use_of_sendKeys_method_then_click_by_return_key_of_laptop () throws InterruptedException {
 		driver.findElement(By.id("cms-forgot-password")).click();
 		Thread.sleep(4000);
@@ -296,13 +307,4 @@ public class HomePageTest extends BaseClass {
 		Thread.sleep(4000);
 	}
 		
-	
-	
-	
-	
-	
-	
-	
-	
-
 }
