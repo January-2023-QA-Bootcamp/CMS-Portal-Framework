@@ -306,5 +306,18 @@ public class HomePageTest extends BaseClass {
 		driver.findElement(By.id("cms-forgotpwd-userId")).sendKeys("enthrall_12", Keys.RETURN);
 		Thread.sleep(4000);
 	}
+	
+	@Test(enabled = false)
+	public void use_of_navigate_method () throws InterruptedException {
+		Thread.sleep(5000);
+		driver.navigate().to("https://www.amazon.com");
+		Thread.sleep(5000);
+		driver.navigate().back();
+		Thread.sleep(5000);
+		driver.navigate().forward();
+		Thread.sleep(5000);
+		driver.navigate().refresh();
+		Thread.sleep(5000);
+	}
 		
 }
