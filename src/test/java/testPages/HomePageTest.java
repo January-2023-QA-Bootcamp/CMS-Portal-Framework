@@ -266,7 +266,7 @@ public class HomePageTest extends BaseClass {
 	
 	// We use User ID field
 	// getAttribute() actually give the value of the Attribute
-	@Test(enabled = true)
+	@Test(enabled = false)
 	public void use_of_getAttribute_method_02 () throws InterruptedException {
 		driver.findElement(By.xpath("//input[@id='cms-login-userId']")).click();
 		// Where you wanna click Next
@@ -307,7 +307,8 @@ public class HomePageTest extends BaseClass {
 		Thread.sleep(4000);
 	}
 	
-	@Test(enabled = false)
+	// Interview Question
+	@Test(enabled = true)
 	public void use_of_navigate_method () throws InterruptedException {
 		Thread.sleep(5000);
 		driver.navigate().to("https://www.amazon.com");

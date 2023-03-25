@@ -119,6 +119,7 @@ public class BaseClass {
 	
 	private void initDriver () {
 		String browserName = config.getProperties(BROWSER);
+		
 		switch (browserName) {
 		case "CHROME":
 			System.setProperty("webdriver.chrome.driver",  "./driver/chromedriver.exe");
