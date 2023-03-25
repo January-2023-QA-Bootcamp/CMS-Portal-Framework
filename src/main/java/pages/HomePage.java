@@ -49,6 +49,12 @@ public class HomePage {
 	By unlock = By.xpath("//a[contains(text(), 'unl')]");
 	// Please see line 102 for clickUnlock() method
 	
+	@FindBy (xpath = "//em[@id='cms-homepage-header-logo-unauth' and @class='cms-icon cms-sprite-loggedout ms-3']")
+	WebElement logo;
+	
+	@FindBy (xpath = "//em[@id='cms-homepage-header' and @class='cms-icon']")
+	WebElement IncorrectLogo;
+	
 	public void clickLoginButton() throws InterruptedException {
 		loginButton.click();
 		Thread.sleep(5000);
@@ -102,6 +108,18 @@ public class HomePage {
 	public void clickUnlock() {
 		// new
 		driver.findElement(unlock).click();
+	}
+	
+	public boolean logoDisplayed () {
+		boolean flag = logo.isDisplayed();
+		System.out.println("Is the Logo displayed? Ans: " + flag);
+		return flag;
+	}
+	
+	public boolean logoDisplayedIncorrect () {
+		boolean flag = IncorrectLogo.isDisplayed();
+		System.out.println("Is the Logo displayed? Ans: " + flag);
+		return flag;
 	}
 	
 	

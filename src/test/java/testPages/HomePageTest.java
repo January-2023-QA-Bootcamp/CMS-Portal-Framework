@@ -1,13 +1,18 @@
 package testPages;
 
 import java.awt.Button;
+import java.awt.Dimension;
+import java.time.Duration;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
+import org.testng.Assert;
 import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
 
-import BaseUtil.BaseClass;
+import baseUtil.BaseClass;
 
 public class HomePageTest extends BaseClass {
 	
@@ -308,7 +313,7 @@ public class HomePageTest extends BaseClass {
 	}
 	
 	// Interview Question
-	@Test(enabled = true)
+	@Test(enabled = false)
 	public void use_of_navigate_method () throws InterruptedException {
 		Thread.sleep(5000);
 		driver.navigate().to("https://www.amazon.com");
@@ -320,5 +325,145 @@ public class HomePageTest extends BaseClass {
 		driver.navigate().refresh();
 		Thread.sleep(5000);
 	}
+	
+	// Very important interview question
+	// How can you reset a window size? or they can ask how you can change the screen size by selenium
+	
+	@Test(enabled = false)
+	public void use_of_set_a_specific_size_for_window() throws InterruptedException {
+		Thread.sleep(4000);
+		// Will get the size of cms window
+		// System.out.println("The size of the maximize screen is: "+ driver.manage().window().getSize());
+		dimension = new org.openqa.selenium.Dimension(800, 500);
+		driver.manage().window().setSize(dimension);
+		Thread.sleep(4000);
+		System.out.println("The size of the set screen is: " + driver.manage().window().getSize());
+		// Extra related to this method
+		Thread.sleep(4000);
+		driver.navigate().to("https://www.cvs.com");
+		Thread.sleep(4000);
+		System.out.println("The size of the set screen is: "+ driver.manage().window().getSize());
+		driver.manage().window().maximize();
+		Thread.sleep(5000);
+		System.out.println("The size of the maximize screen is: "+ driver.manage().window().getSize());
+		Thread.sleep(5000);
+		driver.manage().window().setSize(dimension); // just to show again the set size
+		Thread.sleep(5000);
+		System.out.println("The size of the set screen is: "+ driver.manage().window().getSize());
+		Thread.sleep(5000);
+		driver.manage().window().fullscreen();
+		Thread.sleep(5000);
+		System.out.println("The size of the full screen is: "+ driver.manage().window().getSize());	
+	}
+	
+	// not important at all
+	@SuppressWarnings("deprecation")
+	@Test(enabled = false)
+	public void use_of_set_script_timeout_for_window() {
+        driver.manage().timeouts().setScriptTimeout(Duration.ofSeconds(15));
+        // setScriptTimeout () method deprecated, so giving you warning, this method is going to be out from selenium
+        // you use @SuppressWarnings("deprecation")
+		driver.get("https://www.ebay.com");		
+	}
+	
+	@Test (enabled = false)
+	public void logoDisplayedTest01 () {
+		homePage.logoDisplayed (); // Actual Result
+		Assert.assertTrue(true); // Expected Result
+	}
+	
+	@Test (enabled = false)
+	public void logoDisplayedTest02 () {
+		homePage.logoDisplayed (); // Actual Result or outcome which doesn't match with your below expectation
+		Assert.assertTrue(false); // Expected Result // java.lang.AssertionError: expected [true] but found [false]
+		// Although the outcome is true, but because of difference between expected vs actual is not same, the test case failed
+	}
+	
+	@Test (enabled = false)
+	public void logoDisplayedTest03 () {
+		homePage.logoDisplayed(); // Actual Result : true
+		Assert.assertFalse(false, "Application Logo is not Displayed ..... ..... "); // false false means true
+		//Assert.assertTrue(true, "Application Logo is not Displayed ..... ..... ");  // Expected Result with error message if failed
+	}
+	
+	@Test (enabled = false)
+	public void logoDisplayedTest04 () {
+		homePage.logoDisplayed(); // Actual Result : true
+		Assert.assertFalse(true, "Application Logo is not Displayed ..... ..... ");
+		// java.lang.AssertionError: Application Logo is not Displayed ..... .....  expected [false] but found [true]
+		// error message will be appeared when the assertion failed 
+	}
+	
+	// A regular title test
+	@Test(enabled = false)
+	public void use_of_getTitle_method01() throws InterruptedException {
+		String actual = driver.getTitle();
+		Thread.sleep(5000);	
+		System.out.println("The title of the Page is: " + actual);
+	}
+	
+	// Will Pass
+	@Test(enabled = false)
+	public void use_of_getTitle_method_with_assertion01() throws InterruptedException {
+		// Your expected Title
+		String expected = "CMS Enterprise Portal";
+		String actual = driver.getTitle();
+		System.out.println("The Title of the home Page is: " + actual);
+		Assert.assertEquals(actual, expected, "Home Page Title doesn't match");
+		// Hard Assertion will not go to next line of failed, but move to next line when passed
+		String currentURL = driver.getCurrentUrl();
+		System.out.println("The current url is: " + currentURL);
+	}
+	
+	// Will Fail
+	@Test(enabled = false)
+	public void use_of_getTitle_method_with_assertion02() throws InterruptedException {
+		// Your expected Title
+		String expected = "CMS Enterprise Portal           ";
+		String actual = driver.getTitle();
+		System.out.println("The Title of the home Page is: " + actual);
+		Assert.assertEquals(actual, expected, "Home Page Title doesn't match ....... ");  // Hard Assertion, execution stopped here if Assertion fail
+		// java.lang.AssertionError: Home Page Title doesn't match .......  expected [CMS Enterprise Portal           ] but found [CMS Enterprise Portal]
+		// Hard Assertion will not go to next line of failed, but move to next line when passed
+		String currentURL = driver.getCurrentUrl();
+		System.out.println("The current url is: " + currentURL);
+	}
+	
+	// Will Pass
+	@Test(enabled = false)
+	public void use_of_getTitle_method_with_soft_assertion() throws InterruptedException {
+		// Your expected Title
+		String expected = "CMS Enterprise Portal           ";
+		String actual = driver.getTitle();
+		System.out.println("The Title of the home Page is: " + actual);
+		SoftAssert softAssert = new SoftAssert();
+		softAssert.assertEquals(actual, expected, "Home Page Title doesn't match ....... ");
+		// Soft Assertion, execution will not stopped here if Assertion is failed
+		String currentURL = driver.getCurrentUrl();
+		System.out.println("The current url is: " + currentURL);
+	}
+	
+	// Very very importan for use in framework and also a interview question
+	// similar like above, nothing different, extra example
+	@Test(enabled = false)
+	public void use_of_mouse_hoverAction_on_ourLocations () throws InterruptedException {
+		Thread.sleep(5000);	
+		driver.navigate().to("https://www.mountsinai.org/");
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20)); 
+		WebElement ourLocations = driver.findElement(By.xpath("//a[normalize-space(text())='Our Locations' and @class='hidden-xs dropdown']"));
+		// Actions actions = new Actions(driver); // it is defined in Base class
+		Thread.sleep(2000);
+		actions.moveToElement(ourLocations).build().perform(); // actions object is coming form Base class
+		Thread.sleep(6000);		
+		System.out.println("\nThe text of this web element is: "+ ourLocations.getText());
+
+	}
+
+	
+	
+	
+	
+	
 		
 }
