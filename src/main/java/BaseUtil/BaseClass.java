@@ -1,8 +1,6 @@
 package baseUtil;
 
-import java.security.PublicKey;
 import java.time.Duration;
-
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -11,9 +9,9 @@ import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.Select;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
-
 import io.github.bonigarcia.wdm.WebDriverManager;
 import pages.ForgotUserId;
 import pages.HomePage;
@@ -27,12 +25,13 @@ public class BaseClass {
 	protected Dimension dimension;
 	protected Actions actions;
 	public ForgotUserId forgotUserId;
+	protected Select select;
 	
 	@BeforeMethod
 	public void setUp() {
 		config = new Configuration();	
-		actions = new Actions(driver);
 		initDriver(); // From line 40
+		actions = new Actions(driver);
 		driver.manage().window().maximize();
 		driver.manage().deleteAllCookies();
 		driver.get(config.getProperties(URL));
