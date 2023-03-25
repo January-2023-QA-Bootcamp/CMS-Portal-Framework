@@ -31,9 +31,10 @@ public class Configuration {
 	/*
 	// Unit test just to see loadProperty() is working and then the getProperty is giving us expected value
 	public static void main(String[] args) {
-		Configuration configuration = new Configuration();
-		configuration.loadProperty();
+		Configuration configuration = new Configuration(); // default constructor initialized
+		// configuration.loadProperty(); // we don't need, above line doing the action
 		System.err.println(configuration.getProperties(URL));
+		System.err.println(configuration.getProperties(BROWSER));
 	}
 	*/
 	
