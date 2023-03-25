@@ -1,7 +1,5 @@
 package testPages;
 
-import java.awt.Button;
-import java.awt.Dimension;
 import java.time.Duration;
 
 import org.openqa.selenium.By;
