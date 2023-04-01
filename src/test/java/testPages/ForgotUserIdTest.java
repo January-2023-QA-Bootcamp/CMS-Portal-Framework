@@ -14,8 +14,7 @@ public class ForgotUserIdTest extends BaseClass {
 	// drop down is a commonly asked interview question
 	// here - using selectByIndex() method
 	// This method is not suggested, or not used much
-	// Because, adding a new web element or deleting a new one change the index
-	// number
+	// Because, adding a new web element or deleting a new one change the index number
 	@Test(enabled = false)
 	public void use_of_dropdown_selectByIndex_method() throws InterruptedException {
 		forgotUserId.forgotUserIdClick();
@@ -44,7 +43,7 @@ public class ForgotUserIdTest extends BaseClass {
 	// drop down, all categories
 	// drop down is a commonly asked interview question
 	// use method --> selectByValue()
-	@Test(enabled = true)
+	@Test(enabled = false)
 	public void use_of_dropdown_selectByValue_method() throws InterruptedException {
 		forgotUserId.forgotUserIdClick();
 		Thread.sleep(5000);

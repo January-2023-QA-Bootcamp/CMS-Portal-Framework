@@ -55,6 +55,10 @@ public class HomePage {
 	@FindBy (xpath = "//em[@id='cms-homepage-header' and @class='cms-icon']")
 	WebElement IncorrectLogo;
 	
+	// for logger test
+	@FindBy (name = "user-d-wrong")
+	WebElement wrongUserId;
+
 	public void clickLoginButton() throws InterruptedException {
 		loginButton.click();
 		Thread.sleep(5000);
@@ -120,6 +124,26 @@ public class HomePage {
 		boolean flag = IncorrectLogo.isDisplayed();
 		System.out.println("Is the Logo displayed? Ans: " + flag);
 		return flag;
+	}
+	
+	// To test logger if web element is correct
+	public void loggerPositiveMethod () throws InterruptedException {
+		inputText(userId, "January 2023");
+		Thread.sleep(3000);
+		inputText(password, "Enthrall@1234");
+		Thread.sleep(3000);
+		clickElement(loginButton);
+		Thread.sleep(6000);
+	}
+	
+	// To test logger if web element is not correct
+	public void loggerNegativeMethod () throws InterruptedException {
+		inputText(wrongUserId, "January 2023");
+		Thread.sleep(3000);
+		inputText(password, "Enthrall@1234");
+		Thread.sleep(3000);
+		clickElement(loginButton);
+		Thread.sleep(6000);
 	}
 	
 	
