@@ -3,9 +3,11 @@ package testPages;
 import java.time.Duration;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
@@ -441,7 +443,7 @@ public class HomePageTest extends BaseClass {
 		System.out.println("The current url is: " + currentURL);
 	}
 	
-	// Very very importan for use in framework and also a interview question
+	// Very very important for use in framework and also a interview question
 	// similar like above, nothing different, extra example
 	@Test(enabled = false)
 	public void use_of_mouse_hoverAction_on_ourLocations () throws InterruptedException {
@@ -457,11 +459,255 @@ public class HomePageTest extends BaseClass {
 		System.out.println("\nThe text of this web element is: "+ ourLocations.getText());
 
 	}
+	
+	// Regular click method
+	@Test(enabled = false)
+	public void use_of_click_method_in_loginButtonTest () throws InterruptedException {
+		driver.findElement(By.id("cms-login-submit")).click();
+		Thread.sleep(3000);
+	}
+	
+	// interview question: what are the alternative of click()
+	// alternate of click()
+	@Test(enabled = false)
+	public void alternate_of_click_method_in_loginButtonTest01() throws InterruptedException {
+		driver.findElement(By.id("cms-login-submit")).sendKeys(Keys.ENTER);
+		Thread.sleep(3000);
+	}
+	
+	// alternate of click()
+	@Test(enabled = false)
+	public void alternate_of_click_method_in_loginButtonTest02() throws InterruptedException {
+		driver.findElement(By.id("cms-login-submit")).sendKeys(Keys.RETURN);
+		Thread.sleep(3000);
+	}
+	
+	// important
+	// alternate of click()
+	@Test(enabled = false)
+	public void alternate_of_click_method_in_loginButtonTest03() throws InterruptedException {
+		WebElement loginButton = driver.findElement(By.id("cms-login-submit"));
+		JavascriptExecutor js = (JavascriptExecutor)driver;
+		js.executeScript("arguments[0].click()", loginButton); // arguments[0] means, find the web element of index 0, first occurrence
+		Thread.sleep(4000);
+	}
+	
+	// alternate of click()
+	// "arguments[0].click()" --- easy to memorize, memorize it, if you want
+	// follow the above one, because you can use any kind of locator 
+	// (specially xpath is difficult to create by below one)
+	// Que: what is the alternative of click() method or click an web element 
+	// or how to find a hidden web element-- very important interview question 
+	// don't follow this one, but if you ever see it, i hope you can recognize it
+	@Test(enabled = false)
+	public void alternate_of_click_method_in_loginButtonTest04() throws InterruptedException {
+		JavascriptExecutor js = (JavascriptExecutor)driver;
+		js.executeScript("document.getElementById('cms-login-submit').click();");
+		Thread.sleep(4000);
+	}
+	
+	// From here till line 540, this is high level, so just see, don't take them seriously
+	// alternative to click an web element in many ways (never memorize, a collection of code)
+	// Not important
+	// alternate of click()
+	@Test(enabled = false)
+	public void homepageLoginButtonTest06() {
+		WebElement homepageLoginButton = driver.findElement(By.xpath("//button[@id='cms-login-submit']"));
+		actions.click(homepageLoginButton).perform();
+	}
+	
+	// Not important
+	// alternate of click()
+	@Test(enabled = false)
+	public void homepageLoginButtonTest07() {
+		WebElement homepageLoginButton = driver.findElement(By.xpath("//button[@id='cms-login-submit']"));
+		actions.moveToElement(homepageLoginButton).click().perform();
+	}
 
+	// Not important
+	// alternate of click()
+	@Test(enabled = false)
+	public void homepageLoginButtonTest08() {
+		WebElement homepageLoginButton = driver.findElement(By.xpath("//button[@id='cms-login-submit']"));
+		actions.clickAndHold(homepageLoginButton).release().perform();
+	}
+
+	// Not important
+	// alternate of click()
+	@Test(enabled = false)
+	public void homepageLoginButtonTest09() {
+		WebElement homepageLoginButton = driver.findElement(By.xpath("//button[@id='cms-login-submit']"));
+		actions.sendKeys(homepageLoginButton, Keys.RETURN).perform();
+	}
+	
+	@Test (enabled = false)
+	public void loggerPositiveTest () throws InterruptedException {
+		homePage.loggerPositiveMethod();
+	}
+	
+	@Test (enabled = false)
+	public void loggerNegativeTest () throws InterruptedException {
+		homePage.loggerNegativeMethod();
+	}
+	
+	// login process regular to compare with line 565
+	@Test(enabled = false)
+	public void use_of_sendKeys_method_then_click() throws InterruptedException {
+		driver.findElement(By.xpath("//input[@id='cms-login-userId']")).sendKeys("January 2023");
+		Thread.sleep(4000);
+		driver.findElement(By.name("pass-d")).sendKeys("Enthrall@12345");
+		Thread.sleep(4000);
+		driver.findElement(By.name("Submit Login")).click();
+		Thread.sleep(4000);		
+	}
+	
+	// login process by JavascriptExecutor
+	@Test(enabled = false)
+	public void use_of_sendKeys_method_by_javascriptExecutor_then_click() throws InterruptedException {
+		WebElement userId = driver.findElement(By.xpath("//input[@id='cms-login-userId']"));
+		WebElement password = driver.findElement(By.name("pass-d"));
+		WebElement loginButton = driver.findElement(By.name("Submit Login"));
+		// JavascriptExecutor js = (JavascriptExecutor) driver; // we instantiated in Base class
+		js.executeScript("arguments[0].value='January 2023' ", userId); // how to send text inside a field by JavascriptExecutor
+		Thread.sleep(4000);
+		js.executeScript("arguments[0].value='Enthrall@12345' ", password);
+		Thread.sleep(4000);
+		js.executeScript("arguments[0].click()", loginButton); 
+		Thread.sleep(4000);
+	}
+
+	// it will fail
+	@Test(enabled = false)
+	public void how_to_handle_hidden_element_by_regular_selenium_method() throws InterruptedException {
+		Thread.sleep(5000);	
+		// driver.navigate().to("https://courses.letskodeit.com"); // window handles need to be used
+		driver.navigate().to("https://enthrallit.com/");
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(30));
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
+		// Click on Selenium from Header
+		Thread.sleep(4000);
+		driver.findElement(By.xpath("//a[text()='Selenium']")).click();
+		Thread.sleep(4000);
+		// identify the 'Hide' element and click on it
+		// The search field will be disappeared, but we can pass value on it, as we get info before
+		driver.findElement(By.xpath("//button[@id='formButton3']")).click();
+		// identify element and set/input text or value (line 597)
+		// it will fail by below error message
+		// org.openqa.selenium.ElementNotInteractableException: element not interactable
+		// whenever you find element not interactable in console, that is for sure a hidden element
+		Thread.sleep(4000);
+		driver.findElement(By.xpath("//input[@class='form-control']//parent::form[@id='form3']")).sendKeys("January 2023");
+
+	}
+	
+	@Test(enabled = false)
+	public void how_to_handle_hidden_element_by_javascriptExecutor() throws InterruptedException {
+		Thread.sleep(5000);	
+		// driver.navigate().to("https://courses.letskodeit.com"); // window handles need to be used
+		driver.navigate().to("https://enthrallit.com/");
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(30));
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
+		// Click on Selenium from Header
+		Thread.sleep(4000);
+		driver.findElement(By.xpath("//a[text()='Selenium']")).click();
+		Thread.sleep(4000);
+		// identify the 'Hide' element and click on it
+		// The search field will be disappeared, but we can pass value on it, as we get info before
+		// You can't see 615 is clicked, we need scrolling.
+		driver.findElement(By.xpath("//button[@id='formButton3']")).click();
+		// identify element and set/input text or value by JavascriptExecutor
+		WebElement serchField = driver.findElement(By.xpath("//input[@class='form-control']//parent::form[@id='form3']"));
+		js.executeScript("arguments[0].value='January 2023' ", serchField);
+		
+		// not important
+		// Extra code
+		// Extra not related to hidden elements and not important
+		// How to get title of the page by JavaScript
+		// How to read a JavaScript variable in Selenium WebDriver?
+		// alternate of getTitle()
+		String title = (String) js.executeScript("return document.title");
+		System.out.println("Title of the webpage :" + title);
+	}
+	
+	// very very important
+	// "request An Appointment" web element
+	// using visibilityOfElementLocated() method
+	// This is a very common scenario in industry to use explicitly wait
+	@Test(enabled = false)
+	public void use_of_explicitly_wait_in_MountSinai01() throws InterruptedException {
+		Thread.sleep(5000);	
+		driver.navigate().to("https://www.mountsinai.org/");
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(60));
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+		// Request an Appointment element
+		// We learn line 644 here
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[normalize-space(text())='Request an Appointment' and @class='hidden-xs dropdown']"))).click();
+		// the below line is not part of testing, finding doctor name by putting a name in the field
+		driver.findElement(By.xpath("(//input[@name='name'])[2]")).sendKeys("Andrea Perez", Keys.RETURN);
+		Thread.sleep(4000);
+	}
+	
+	// very very important
+	// "request An Appointment" web element
+	// using elementToBeClickable() method
+	// This is a very common scenario in industry
+	@Test(enabled = false)
+	public void use_of_explicitly_wait_in_MountSinai02() throws InterruptedException {
+		Thread.sleep(5000);	
+		driver.navigate().to("https://www.mountsinai.org/");
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+		wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[normalize-space(text())='Request an Appointment' and @class='hidden-xs dropdown']"))).click();
+		// the below line is not part of testing
+		driver.findElement(By.xpath("(//input[@name='name'])[2]")).sendKeys("Andrea Perez", Keys.RETURN);
+		Thread.sleep(4000);
+	}
+	
+	// important
+	// "request An Appointment" web element
+	// using visibilityOf() method
+	@Test(enabled = false)
+	public void use_of_explicitly_wait_in_MountSinai03() throws InterruptedException {
+		Thread.sleep(5000);	
+		driver.navigate().to("https://www.mountsinai.org/");
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+		WebElement requestAnAppointment = driver.findElement(By.xpath("//a[normalize-space(text())='Request an Appointment' and @class='hidden-xs dropdown']"));
+		wait.until(ExpectedConditions.visibilityOf(requestAnAppointment)).click();
+		// the below line is not part of testing
+		driver.findElement(By.xpath("(//input[@name='name'])[2]")).sendKeys("Andrea Perez", Keys.RETURN);
+		Thread.sleep(4000);
+	}
+	
+	// not important
+	// "request An Appointment" web element
+	// using presenceOfElementLocated() method
+	@Test(enabled = false)
+	public void use_of_explicitly_wait_in_MountSinai04() throws InterruptedException {
+		Thread.sleep(5000);	
+		driver.navigate().to("https://www.mountsinai.org/");
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//a[normalize-space(text())='Request an Appointment' and @class='hidden-xs dropdown']"))).click();
+		// the below line is not part of testing
+		driver.findElement(By.xpath("(//input[@name='name'])[2]")).sendKeys("Andrea Perez", Keys.RETURN);
+		Thread.sleep(4000);
+	}
 	
 	
-	
-	
-	
+	// not important
+	// "request An Appointment" web element
+	// using textToBePresentInElement() method, this is not a clickable method, just to recognize the web element
+	@Test(enabled = false)
+	public void use_of_explicitly_wait_in_MountSinai05() throws InterruptedException {
+		Thread.sleep(5000);	
+		driver.get("https://www.mountsinai.org/");
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+		WebElement raa = driver.findElement(By.xpath("//a[normalize-space(text())='Request an Appointment' and @class='hidden-xs dropdown']"));
+		wait.until(ExpectedConditions.textToBePresentInElement(raa, "Request an Appointment"));
+		Thread.sleep(4000);
+	}
+
 		
 }

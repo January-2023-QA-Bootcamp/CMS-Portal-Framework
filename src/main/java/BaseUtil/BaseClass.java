@@ -2,6 +2,7 @@ package baseUtil;
 
 import java.time.Duration;
 import org.openqa.selenium.Dimension;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -10,6 +11,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import io.github.bonigarcia.wdm.WebDriverManager;
@@ -26,12 +28,15 @@ public class BaseClass {
 	protected Actions actions;
 	public ForgotUserId forgotUserId;
 	protected Select select;
+	protected JavascriptExecutor js;
+	protected WebDriverWait wait;
 	
 	@BeforeMethod
 	public void setUp() {
 		config = new Configuration();	
 		initDriver(); // From line 40
-		actions = new Actions(driver);
+		actions = new Actions(driver);	
+		js = (JavascriptExecutor)driver;
 		driver.manage().window().maximize();
 		driver.manage().deleteAllCookies();
 		driver.get(config.getProperties(URL));
@@ -40,6 +45,7 @@ public class BaseClass {
 		long explicitlyWait =	Long.parseLong(config.getProperties(EXPLICITLY_WAIT));
 		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(pageLoadTime));
 		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(implicitlyWait));
+		wait = new WebDriverWait(driver, Duration.ofSeconds(explicitlyWait));
 		initClasses(); // From line 71
 	}
 	
