@@ -5,15 +5,22 @@ import java.awt.Robot;
 import java.awt.event.KeyEvent;
 import java.time.Duration;
 import java.util.List;
+import java.util.Set;
+import java.util.function.Function;
 
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.FluentWait;
+import org.openqa.selenium.support.ui.Wait;
 import org.testng.Assert;
+import org.testng.SkipException;
 import org.testng.TestNGException;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
@@ -1042,7 +1049,7 @@ public class HomePageTest extends BaseClass {
 	}
 	
 	// How to read a cell of a Table 
-	@Test(enabled = true)
+	@Test(enabled = false)
 	public void readAnyCellOfARowofTheTable () throws InterruptedException {
 		Thread.sleep(5000);	
 		driver.get("https://www.amazon.com");
@@ -1054,7 +1061,318 @@ public class HomePageTest extends BaseClass {
 		WebElement cell = driver.findElement(By.cssSelector("table.navFooterMoreOnAmazon tr:nth-child(1) td:nth-child(3)"));
 		System.out.println(cell.getText());			
 	}
+	
+	@Test(enabled = false)
+	public void switchBetweenWindow01 () throws InterruptedException {
+		Thread.sleep(5000);	
+		driver.get("https://demoqa.com/browser-windows");
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+		String parentWindow = driver.getWindowHandle();
+		System.out.println("Parent Window ID: " + parentWindow + "\n");
+		Thread.sleep(3000);
+		driver.findElement(By.xpath("//button[text()='New Window']")).click();
+		Thread.sleep(3000);
+		driver.findElement(By.xpath("//button[text()='New Window']")).click(); // clicked twice to open 2 child window
+		Thread.sleep(3000);
+		// very very important interview question:  How you handle windows from parent to child? 
+		// or how you can recognize the parent and child window	
+		// Get all window handles -- include parent + child = Total 3 here
+		// why we are using set? because we don't want duplicate, and set doesn't allow duplicate [a set of String]
+		Set <String> allWindowHandles = driver.getWindowHandles();
+		System.out.println("Total Windows Opened: " + allWindowHandles.size()); 
+		// Extract Parent and child window from all window handles
+		String parent = (String)allWindowHandles.toArray()[0];
+		String child1 = (String)allWindowHandles.toArray()[1];
+		String child2 = (String)allWindowHandles.toArray()[2];
+		System.out.println("Parent Window ID: " + parent + "\n");
+		System.out.println("Child1 Window ID: " + child1 + "\n");
+		System.out.println("Child2 Window ID: " + child2 + "\n");
+		// Then switch from one window to other window (parent to child) by below
+		driver.switchTo().window(child1);	
+		WebElement header = driver.findElement(By.id("sampleHeading"));
+		System.out.println("The Text for the Web Element is: " + header.getText());
+		System.out.println("The driver moved to the child 1 window");
+	}
+	
+	// same way for moving from child to window for different url
+	@Test(enabled = false)
+	public void switchBetweenWindow02 () throws InterruptedException {
+		Thread.sleep(5000);	
+		driver.get("https://enthrallit.com");
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+		// to click seelenium
+		driver.findElement(By.xpath("//a[text()='Selenium']")).click();
+		Thread.sleep(3000);
+		
+		// This will scroll up the page by 1000 pixel vertically
+		Thread.sleep(4000); // used to see the scroll
+		js.executeScript("window.scrollBy(0,1000)", ""); // scroll down
+		Thread.sleep(4000);
+		
+		String mainWindow = driver.getWindowHandle(); // learn this line
+		System.out.println("Main Window ID: " + mainWindow + "\n");
+		
+		// click on the Open Window button
+		driver.findElement(By.xpath("(//button[text()='Open Window'])[1]")).click();
+		Thread.sleep(5000);
+		// interview question:  How you handle windows from parent to child? or how you can recognize the parent and child window
+		
+		// Get all window handles -- include parent + child
+		// why we are using set? because we don't want duplicate, and set doesn't allow duplicate
+		Set<String> allWindowHandles = driver.getWindowHandles();
+		System.out.println("Windows Open After Click: " + allWindowHandles.size());
+		
+		// Extract Parent and child window from all window handles
+		String parent = (String) allWindowHandles.toArray()[0]; // first index: parent
+		String child = (String) allWindowHandles.toArray()[1]; // second index: child 
 
+		//	Use window handle to switch from one window to other window (parent to child)
+		driver.switchTo().window(child); // switchTo() -- method is used to switch from one to another
+		System.out.println("The driver moved to the child window");
+		
+	}
+	
+	// different way for moving from child to window for different url
+	@Test(enabled = false)
+	public void switchBetweenWindow03 () throws InterruptedException {
+		Thread.sleep(5000);	
+		driver.get("https://enthrallit.com");
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+		Thread.sleep(7000);	
+		driver.findElement(By.xpath("//a[text()='Selenium']")).click();
+		Thread.sleep(3000);
+		
+		// This will scroll up the page by 1000 pixel vertically
+		Thread.sleep(4000); // used to see the scroll
+		js.executeScript("window.scrollBy(0,1000)", ""); // scroll down
+		Thread.sleep(4000);
+		
+		String mainWindow = driver.getWindowHandle(); // learn this line
+		System.out.println("Main Window ID: " + mainWindow + "\n");
+		
+		// click on the Open Window button
+		driver.findElement(By.xpath("(//button[text()='Open Window'])[1]")).click();
+		Thread.sleep(5000);
+		
+		// interview question:  How you handle windows from parent to child? or how you can recognize the parent and child window
+		
+		// Get all window handles -- include parent + child
+		// why we are using set? because we don't want duplicate, and set doesn't allow duplicate
+		Set<String> allWindowHandles = driver.getWindowHandles();
+		System.out.println("Total Windows Open: " + allWindowHandles.size());
+		
+		// for each loop, line 1164, get title and get current url is not related to this code
+		for (String wh : allWindowHandles) {
+			if (mainWindow.equals(wh)) {
+				System.out.println("\t Parent: \t" + wh + "\n \t URL: \t \t" + driver.getCurrentUrl()
+						+ "\n \t Title: \t \t" + driver.getTitle());
+			} else {
+				driver.switchTo().window(wh);
+				System.out.println("\t Child: \t" + wh + "\n \t URL: \t \t" + driver.getCurrentUrl()
+						+ "\n \t Title: \t \t" + driver.getTitle());
+			}
+		}		
+		
+	}
+	
+	// Tough, don't try to understand the code, just understand the concept: time+condition+frequency
+	// Interview question, generally not used in industry
+	@Test (enabled = false)
+	public void logoTest04() throws InterruptedException {
+		Wait<WebDriver> wait = new FluentWait<WebDriver>(driver)
+				.withTimeout(Duration.ofSeconds(20))
+				.pollingEvery(Duration.ofSeconds(5))
+				.ignoring(NoSuchElementException.class); // line ends here
+		WebElement logo = wait.until(new Function<WebDriver, WebElement>() {
+			public WebElement apply(WebDriver driver) {
+				return driver.findElement(
+						By.xpath("//em[@id='cms-homepage-header-logo-unauth' and @class='cms-icon cms-sprite-loggedout ms-3']"));
+			}
+		});
+		logo.isDisplayed();
+	}
+	
+	@Test(enabled = false, priority = 1, groups = {"functionalTest", "sanityTest", "smokeTest", "regressionTest"})
+	public void use_of_getTitle_method_with_assertion11() throws InterruptedException {
+		// Your expected Title
+		String expected = "CMS Enterprise Portal";
+		String actual = driver.getTitle();
+		System.out.println("The Title of the home Page is: " + actual);
+		Assert.assertEquals(actual, expected, "Home Page Title doesn't match ....... ");  
+		// Hard Assertion will not go to next line of failed, but move to next line when passed
+		String currentURL = driver.getCurrentUrl();
+		System.out.println("The current url is: " + currentURL);
+		
+	}
+	
+	@Test(enabled = false, priority = 1, groups = {"regressionTest"})
+	public void use_of_getTitle_method_with_assertion12() throws InterruptedException {
+		// Your expected Title
+		String expected = "CMS Enterprise Portal           ";
+		String actual = driver.getTitle();
+		System.out.println("The Title of the home Page is: " + actual);
+		Assert.assertEquals(actual, expected, "Home Page Title doesn't match ....... ");  // Hard Assertion, execution stopped here if Assertion fail
+		// Hard Assertion will not go to next line of failed, but move to next line when passed
+		String currentURL = driver.getCurrentUrl();
+		System.out.println("The current url is: " + currentURL);
+		
+	}
+	
+	@Test(enabled = false, priority = 1, groups = {"sanityTest", "regressionTest"})
+	public void use_of_getTitle_method_with_assertion13() throws InterruptedException {
+		String expected = "A CMS Enterprise Portal"; // WHICH is wrong
+		String actual = driver.getTitle();
+		System.out.println("Home Page Title is: "+actual);
+		SoftAssert softAssert = new SoftAssert(); 	// Soft Assertion, mainly interview question, not used generally
+		softAssert.assertEquals(actual, expected, "Home Page Title doesn't match ..." );
+		String currentURL =	driver.getCurrentUrl();
+		System.out.println("The current url from priority 3 is: "+currentURL);
+	
+	}
+	
+	@Test (enabled = false, priority = 4, groups = {"smokeTest", "sanityTest", "functionalTest", "regressionTest"})
+	public void logoTest(){
+		WebElement logo = driver.findElement(By.xpath("//em[@id='cms-homepage-header-logo-unauth' and @class='cms-icon cms-sprite-loggedout ms-3']"));
+		boolean flag = logo.isDisplayed();
+		System.out.println("Is the logo displayed? Ans: "+flag);
+		Assert.assertTrue(true, "Application Logo is not displayed .....");	// error message will be appeared when the assertion failed 
+	
+	}
+	
+	@Test(enabled = false)
+	public void use_of_expectedExceptions01 () {
+		System.out.println("We can verify whether a code throws the expected exception or not. Here it will fail");
+		int i = 1/0;	
+	}
+	
+	@Test(enabled = false, expectedExceptions = ArithmeticException.class)
+	public void use_of_expectedExceptions02 () {
+		System.out.println("We can verify whether a code throws the expected exception or not. Here it will pass");
+		int i = 1/0;	
+	}
+	
+	@Test(enabled = false, expectedExceptions = NoSuchElementException.class)
+	public void use_of_expectedExceptions03 () throws InterruptedException {
+		driver.findElement(By.id("ms-login-submit")).click();
+		Thread.sleep(3000);
+	}
+	
+	@Test (enabled = false)
+	public void b_logoTest01(){
+		WebElement logo = driver.findElement(By.xpath("//em[@id='cms-homepage-header-logo-unauth' and @class='cms-icon cms-sprite-loggedout ms-3']"));
+		boolean flag = logo.isDisplayed();
+		System.out.println("Is the logo displayed? Ans: "+flag);
+		Assert.assertTrue(true, "Application Logo is not displayed .....");	
+	}
+	
+	@Test(enabled = false, dependsOnMethods = "b_logoTest01")
+	public void a_newUserRegistrationTest01() {
+		boolean nurButtonEnabled = driver.findElement(By.xpath("//a[text()='New User Registration']")).isEnabled();
+		System.out.println("Is the New User Registration Button Enable? Ans: " + nurButtonEnabled);
+	}	
+	// change the logoTest02 method to fail and see the above method skipped as it depends on logoTest02
+	
+	@Test (enabled = false)
+	public void b_logoTest02(){
+		// the xpath is wrong
+		WebElement logo = driver.findElement(By.xpath("//mmem[@id='cms-homepage-header-logo-unauth' and @class='cms-icon cms-sprite-loggedout ms-3']"));
+		boolean flag = logo.isDisplayed();
+		System.out.println("Is the logo displayed? Ans: "+flag);
+		Assert.assertTrue(true, "Application Logo is not displayed .....");	
+	}
+	
+	@Test(enabled = false, dependsOnMethods = "b_logoTest02")
+	public void a_newUserRegistrationTest02() {
+		boolean nurButtonEnabled = driver.findElement(By.xpath("//a[text()='New User Registration']")).isEnabled();
+		System.out.println("Is the New User Registration Button Enable? Ans: " + nurButtonEnabled);
+	}	
+	
+	// Explain in the next class, forgot to add
+	@Test(enabled = true, groups = { "functionalTest" })
+	public void nonSkipHomePageTitleTest() {
+		String expected = "CMS Enterprise Portal";
+		String actual = driver.getTitle();
+		System.out.println("home page title is: " + actual);
+		Assert.assertEquals(actual, expected, "Home Page Title doesn't match...");	
+		System.out.println("No need to skip the test");
+	}	
+	
+	// only example where 'throw' is used
+	// How to skip a test?
+	@Test(enabled = true, groups = { "functionalTest" })
+	public void skipHomePageTitleTest01() {
+		String title = "CMS Enterprise Portal";
+		if (title.equals(driver.getTitle())) {
+			throw new SkipException("Skipping -- as the title matches as expected");
+		} else {
+			System.out.println("Home Page Title doesn't match...");
+		}
+		System.out.println("I am out of the if else condition");
+	}	
+	
+	@Test(enabled = true, groups = { "functionalTest" })
+	public void skipHomePageTitleTest02() {
+		// expected is different than actual
+		String title = "CMS Enterprise Portal                      "; // title will not match
+		if (title.equals(driver.getTitle())) {
+			throw new SkipException("Skipping -- as the title matches as expected");
+		} else {
+			System.out.println("Home Page Title doesn't match...");
+		}
+		System.out.println("I am out of the if else condition");
+	}	
+	
+	
+	
+	
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 		
 	
 		
